@@ -1,6 +1,5 @@
 {
     "port": "COM3",
     "board": "arduino:avr:uno",
-    "sketch": ""
-
+    "sketch": "ArduinoUNO\\ArduinoUnoReset.ino"
 }
