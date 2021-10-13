@@ -2,5 +2,5 @@
     "port": "COM3",
     "board": "arduino:avr:uno",
     "sketch": "ArduinoUNO\\ArduinoUnoReset.ino",
-    
+    "programmer": "arduino:arduinoasisp"
 }
