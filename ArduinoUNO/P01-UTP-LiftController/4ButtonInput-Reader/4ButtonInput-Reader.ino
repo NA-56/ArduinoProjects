@@ -1,39 +1,38 @@
 #define Button1 2
-#define Button2 3
+#define Button2 7
 #define Button3 4
 #define Button4 5
 
-int buttonState = 0;
-int buttonBeingPressed=0;
-int buttons[4];
+int buttonState;
+int buttons[4] = {Button1,Button2,Button3,Button4};
 
 void setup()
 {
-    buttons[0] = Button1;
-    buttons[1] = Button2;
-    buttons[2] = Button3;
-    buttons[3] = Button4;
-
     ButtonsCofig(buttons);
-   
     Serial.begin(9600);
+
+    
     
 }
 
+int lastButton = 0; 
+int PressedButton = 0;
+
 void loop()
 {
-    buttonBeingPressed = -1;
-   for (int i = 0; i < sizeof(buttons) ; i++)
+    PressedButton = CheckForInput(); 
+    Serial.print("\n");
+    while (lastButton == PressedButton )
     {
-        buttonState = digitalRead(buttons[i]);
-
-        if (buttonState == HIGH)
-        {
-            buttonBeingPressed = i+1;
-            Serial.print("\n Button being pressed is the button: ");
-            Serial.print(i+1);
-            break;
-        }
+        PressedButton = CheckForInput();
+    }
+   
+   if (PressedButton !=3 )
+    {
+        Serial.print ("\n Button being pressed is the button: ");
+        Serial.print ( PressedButton );
+        Serial.print("\n");
+        lastButton = PressedButton;
     }
 
 }
@@ -41,10 +40,28 @@ void loop()
 #pragma region Complementary methods
 void ButtonsCofig(int buttons[]){
     
-    for (int i = 0; i < sizeof(buttons) ; i++)
+    for (int i = 0; i < sizeof(buttons)/sizeof(buttons[0]) ; i++)
     {
         pinMode(buttons[i], INPUT);
     }
      
+}
+
+
+int CheckForInput(){
+
+    buttonState = 0;
+
+    for (int i = 0; i < sizeof(buttons)/sizeof(buttons[0]) ; i++)
+    {
+        buttonState = digitalRead(buttons[i]);
+
+        if (buttonState == HIGH )
+        {   
+            return buttons[i];
+        }
+    }
+
+    
 }
 #pragma endregion
