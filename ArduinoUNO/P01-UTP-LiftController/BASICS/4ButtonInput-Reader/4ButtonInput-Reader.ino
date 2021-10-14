@@ -1,5 +1,5 @@
 #define Button1 2
-#define Button2 7
+#define Button2 3
 #define Button3 4
 #define Button4 5
 
@@ -21,14 +21,11 @@ int PressedButton = 0;
 void loop()
 {
     PressedButton = CheckForInput(); 
-    Serial.print("\n");
-    while (lastButton == PressedButton )
+    if (lastButton == PressedButton)
     {
-        PressedButton = CheckForInput();
-    }
-   
-   if (PressedButton !=3 )
-    {
+        
+    }else {  
+    
         Serial.print ("\n Button being pressed is the button: ");
         Serial.print ( PressedButton );
         Serial.print("\n");
