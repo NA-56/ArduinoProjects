@@ -7,11 +7,14 @@
 
 
 void Set(){
+    SetAllPins 
 
 }
 
 void Loop() {
     
+
+
 }
 
 
