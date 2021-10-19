@@ -39,6 +39,18 @@ int pressedButton = 0;
 
 #pragma endregion
 
+#pragma region 5011AS-NumberDisplay pin & variable declaration
+
+#define PIN0 A0
+#define PIN1 A1
+#define PIN2 A2
+#define PIN3 A3
+#define PIN4 A4
+
+uint8_t AnalogPins[] = {PIN0,PIN1,PIN2,PIN3,PIN4 };
+
+#pragma endregion 
+
 int carHeight; 
 
 void setup()
@@ -49,54 +61,24 @@ void setup()
     SR04SensorSetup();
     SG90ServoSetUp();
     ButtonsCofig(buttons);
+    NumberDisplayCofig(AnalogPins,OUTPUT);
 
 }
 
 void loop()
 {
-    carHeight = GetDistance();
 
-    pressedButton = CheckForInput();
-    if (lastButton==pressedButton)
-    {
-    
-    }else{
-        switch (pressedButton)
-        {
-        case 1:
-            /* code */
-            break;
-        case 2:
-            //code
-            break;
-        case 3:
-            /* code */
-            break;
-        case 4:
-            //code
-            break;
-        }
-    }
-    
-
-
-    if (true)
-    {
-        //Make the motor spin in one direction 
-        OneStep(false);
-        //delay(2);
-    }
-
-    if (true)
-    {
-        //Close the door
-        SG90ServoActivate(false);
-        //Open the door 
-        SG90ServoActivate(true);
-    }
-    
     
 }
+
+#pragma region Seconday Functions
+
+
+
+
+
+#pragma endregion 
+
 
 #pragma region Complementary Functions
 
@@ -263,6 +245,63 @@ void loop()
         }
     }
 
+
+    #pragma endregion
+
+    #pragma region 5011AS-NumberDisplay Functions
+
+    void NumberDisplayCofig(uint8_t pins[],uint8_t mode)
+    {
+            for (int i = 0; i < sizeof(pins)/sizeof(pins[0]) ; i++)
+        {
+            pinMode(pins[i], mode);
+        }
+    }
+
+    void DisplayFloor(int floorNumber)
+    {
+
+        switch (floorNumber)
+        {
+        case 1:
+
+            digitalWrite(PIN0,LOW);
+            digitalWrite(PIN1,LOW);
+            digitalWrite(PIN2,LOW);
+            digitalWrite(PIN3,HIGH);
+            digitalWrite(PIN4,LOW);
+
+            break;
+        case 2:
+
+            digitalWrite(PIN0,HIGH);
+            digitalWrite(PIN1,HIGH);
+            digitalWrite(PIN2,HIGH);
+            digitalWrite(PIN3,LOW);
+            digitalWrite(PIN4,LOW);
+
+            break;
+        case 3:
+
+            digitalWrite(PIN0,HIGH);
+            digitalWrite(PIN1,HIGH);
+            digitalWrite(PIN2,LOW);
+            digitalWrite(PIN3,HIGH);
+            digitalWrite(PIN4,LOW);
+
+            break;
+
+        case 4:
+
+            digitalWrite(PIN0,LOW);
+            digitalWrite(PIN1,HIGH);
+            digitalWrite(PIN2,LOW);
+            digitalWrite(PIN3,HIGH);
+            digitalWrite(PIN4,HIGH);
+            
+            break;
+        }
+    }
 
     #pragma endregion
 
