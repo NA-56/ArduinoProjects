@@ -4,7 +4,9 @@
 #define STEPPER3 10
 #define STEPPER4 11
 
+
 int stepNumber = 0; 
+
 #pragma endregion
  
 #pragma region HC-SR04 Sensor pin & variable declaration
@@ -51,7 +53,17 @@ uint8_t AnalogPins[] = {PIN0,PIN1,PIN2,PIN3,PIN4 };
 
 #pragma endregion 
 
-int carHeight; 
+#pragma region Main variable declaration
+
+#define Level1 2  //cm
+#define Level2 12 //cm
+#define Level3 22 //cm
+#define Level4 32 //cm
+
+int currentHeight = 0;
+
+
+#pragma endregion
 
 void setup()
 {
@@ -67,30 +79,154 @@ void setup()
 
 void loop()
 {
+    pressedButton = CheckForInput();
+    if (lastButton==pressedButton)
+    {
+        
+    } 
+    else    
+    {
+        DisplayFloor(pressedButton);
+        currentHeight = GetDistance();
 
-    
+        if (currentHeight > Level4 || currentHeight < Level1 )
+        {
+            Serial.print("There is an error with the HC-Sensor");
+        }
+        else
+        {
+            SG90ServoActivate(false);//close the gates
+            switch (pressedButton)
+            {            
+            case 1:
+                
+                if( currentHeight = Level1)
+                {
+                    SG90ServoActivate(true);
+                }
+                else
+                {
+                    while (currentHeight > Level1)
+                    {
+                        OneStep(false);//Rotates down
+                        currentHeight = GetDistance();
+                        
+                    }
+                    SG90ServoActivate(true);
+                }
+                
+                break;
+            case 2:
+
+                if (currentHeight = Level2)
+                {
+                    SG90ServoActivate(true);
+                }
+                else
+                {
+                   if (currentHeight < Level2 )
+                   {
+                        while (currentHeight < Level2)
+                        {
+                            OneStep(true);//Rotates up
+                            currentHeight = GetDistance();
+                        
+                        }
+                        SG90ServoActivate(true);
+
+                   }
+                   else 
+                   {
+                        while (currentHeight > Level2)
+                        {
+                            OneStep(false);//Rotates down   
+                            currentHeight = GetDistance();
+                        
+                        }
+                        SG90ServoActivate(true);
+                    
+                    }
+                }
+
+                break;
+
+            case 3:
+
+                    if( currentHeight = Level3)
+                    {
+                        SG90ServoActivate(true);
+                    }
+                    else
+                    {
+                        if (currentHeight < Level3 )
+                         {
+                            while (currentHeight < Level3)
+                            {
+                                OneStep(true);//Rotates up
+                                currentHeight = GetDistance();
+                            
+                            }
+                            SG90ServoActivate(true);
+
+                        }
+                        else 
+                        {
+                            
+                            while (currentHeight > Level3)
+                            {
+                                OneStep(false);//Rotates down   
+                                currentHeight = GetDistance();
+                            }
+                            SG90ServoActivate(true);
+                            
+                        }
+                    }
+
+                break;
+
+            case 4:
+
+                if( currentHeight = Level4)
+                {
+                    SG90ServoActivate(true);
+                }
+                else
+                {
+                    while (currentHeight < Level4)
+                    {
+                        OneStep(true);//Rotates up
+                        currentHeight = GetDistance();
+                        
+                    }
+                    SG90ServoActivate(true);
+                }
+
+                break;
+            
+            default:
+                Serial.print("There is an error with the button input");
+                break;
+            }
+                
+        }
+        
+        lastButton = pressedButton;
+    }
+        
 }
-
-#pragma region Seconday Functions
-
-
-
-
-
-#pragma endregion 
 
 
 #pragma region Complementary Functions
 
     #pragma region Stepper Functions
 
-    void StepperSetUp()
-    {
+    void StepperSetUp() {
         pinMode(STEPPER1,OUTPUT);
         pinMode(STEPPER2,OUTPUT);
         pinMode(STEPPER3,OUTPUT);
         pinMode(STEPPER4,OUTPUT);
     }
+
 
     void OneStep(bool dir)
     {
@@ -300,6 +436,17 @@ void loop()
             digitalWrite(PIN4,HIGH);
             
             break;
+        
+        default:
+
+            digitalWrite(PIN0,LOW);
+            digitalWrite(PIN1,LOW);
+            digitalWrite(PIN2,LOW);
+            digitalWrite(PIN3,LOW);
+            digitalWrite(PIN4,LOW);
+
+            break;
+
         }
     }
 
