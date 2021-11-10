@@ -308,7 +308,7 @@ void loop()
     {
 
         pinMode(trigPin,OUTPUT);
-        pinMode(echoPin,OUTPUT);
+        pinMode(echoPin,INPUT);
 
 
     }
