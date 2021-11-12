@@ -1,6 +1,6 @@
 {
     "port": "COM3",
     "board": "arduino:avr:uno",
-    "sketch": "ArduinoUNO\\P01-UTP-LiftController\\P01-UTP-LiftController.ino",
+    "sketch": "ArduinoUNO\\P01-UTP-LiftController\\BASICS\\4ButtonInput-Reader\\4ButtonInput-Reader.ino",
     "programmer": "arduino:arduinoasisp"
 }
