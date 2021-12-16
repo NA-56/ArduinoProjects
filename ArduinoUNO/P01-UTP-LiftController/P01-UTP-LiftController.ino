@@ -70,6 +70,7 @@ void loop()
         Serial.print("\n");
 
         currentHeight = GetDistance();
+        
         Serial.print ("\n The distance is: ");
         Serial.print ( currentHeight );
         Serial.print("\n");
