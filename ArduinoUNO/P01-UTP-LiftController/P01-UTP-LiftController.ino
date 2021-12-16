@@ -18,14 +18,6 @@ float distance;
 
 #pragma endregion
 
-#pragma region SG90Servo pin & variable declaration
-
-#define ServoPin 7
-#include <Servo.h>
-Servo servo;
-
-#pragma endregion 
-
 #pragma region ButtomInputs pin & variable declaration
 
 #define Button1 2 
@@ -307,32 +299,6 @@ void loop()
         distance = duration * 0.034/2;
 
         return distance;
-    }
-
-    #pragma endregion
-
-    #pragma region SG90Servo Functions
-
-    void SG90ServoSetUp(){
-        
-        servo.attach(ServoPin);
-        servo.write(0);
-        delay(2000);
-    }
-
-    void SG90ServoActivate(bool action){
-
-        //Action is going to comunicate what the door does
-        // TRUE = opens, FALSE = closes
-        if (action)
-        {
-            servo.write(90);
-            delay(1000);
-        }else{
-            servo.write(0);
-            delay(1000);
-        }
-        
     }
 
     #pragma endregion
