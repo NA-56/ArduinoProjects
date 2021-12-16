@@ -1,8 +1,8 @@
 
-#define STEPPER_PIN_1 9
-#define STEPPER_PIN_2 10
-#define STEPPER_PIN_3 11
-#define STEPPER_PIN_4 12
+#define STEPPER_PIN_1 8
+#define STEPPER_PIN_2 9
+#define STEPPER_PIN_3 10
+#define STEPPER_PIN_4 11
 int step_number = 0;
 
 void setup() {
@@ -12,13 +12,14 @@ pinMode(STEPPER_PIN_2, OUTPUT);
 pinMode(STEPPER_PIN_3, OUTPUT);
 pinMode(STEPPER_PIN_4, OUTPUT);
 
+pinMode(2,INPUT);
+
 }
 
 void loop() {
- 
+  
   OneStep(false);
   delay(2);
-  
 
 }
 

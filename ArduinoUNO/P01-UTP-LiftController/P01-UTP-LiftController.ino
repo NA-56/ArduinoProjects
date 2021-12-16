@@ -14,7 +14,7 @@ int stepNumber = 0;
 #define echoPin 13
 
 long duration;
-int distance;
+float distance;
 
 #pragma endregion
 
@@ -41,24 +41,12 @@ int pressedButton = 0;
 
 #pragma endregion
 
-#pragma region 5011AS-NumberDisplay pin & variable declaration
-
-#define PIN0 A0
-#define PIN1 A1
-#define PIN2 A2
-#define PIN3 A3
-#define PIN4 A4
-
-uint8_t AnalogPins[] = {PIN0,PIN1,PIN2,PIN3,PIN4 };
-
-#pragma endregion 
-
 #pragma region Main variable declaration
 
-#define Level1 2  //cm
-#define Level2 12 //cm
-#define Level3 22 //cm
-#define Level4 32 //cm
+#define Level1 2.5  //cm
+#define Level2 14 //cm
+#define Level3 29 //cm
+#define Level4 41 //cm
 
 int currentHeight = 0;
 
@@ -71,9 +59,8 @@ void setup()
 
     StepperSetUp();
     SR04SensorSetup();
-    SG90ServoSetUp();
+    //SG90ServoSetUp();
     ButtonsCofig(buttons);
-    NumberDisplayCofig(AnalogPins,OUTPUT);
 
 }
 
@@ -86,128 +73,122 @@ void loop()
     } 
     else    
     {
-        DisplayFloor(pressedButton);
-        currentHeight = GetDistance();
+        Serial.print ("\n Button being pressed is the button: ");
+        Serial.print ( pressedButton );
+        Serial.print("\n");
 
-        if (currentHeight > Level4 || currentHeight < Level1 )
+        currentHeight = GetDistance();
+        Serial.print ("\n The distance is: ");
+        Serial.print ( currentHeight );
+        Serial.print("\n");
+
+        switch (pressedButton)
         {
-            Serial.print("There is an error with the HC-Sensor");
-        }
-        else
-        {
-            SG90ServoActivate(false);//close the gates
-            switch (pressedButton)
-            {            
-            case 1:
+        case 2:
+            if (currentHeight == Level1)
+            {
                 
-                if( currentHeight = Level1)
-                {
-                    SG90ServoActivate(true);
-                }
-                else
+            }
+            else{
+                if (currentHeight > Level1)
                 {
                     while (currentHeight > Level1)
                     {
-                        OneStep(false);//Rotates down
-                        currentHeight = GetDistance();
-                        
+                        OneStep(true); //Go down
+                        currentHeight=GetDistance();
                     }
-                    SG90ServoActivate(true);
+                }else
+                {
+                    Serial.print("Hay un error con el nivel 1");
                 }
-                
-                break;
-            case 2:
+            }
+        break;
 
-                if (currentHeight = Level2)
+        case 3:
+            if (currentHeight == Level2)
+            {
+                
+            }
+            else{
+                if (currentHeight > Level2)
                 {
-                    SG90ServoActivate(true);
-                }
-                else
+                    while (currentHeight > Level2)
+                    {
+                        OneStep(true); //Go down
+                        currentHeight=GetDistance();
+                    }
+                }else
                 {
-                   if (currentHeight < Level2 )
-                   {
+                   if (currentHeight < Level2)
+                    {
                         while (currentHeight < Level2)
                         {
-                            OneStep(true);//Rotates up
-                            currentHeight = GetDistance();
-                        
+                            OneStep(false); //Go up
+                            currentHeight=GetDistance();
                         }
-                        SG90ServoActivate(true);
-
-                   }
-                   else 
-                   {
-                        while (currentHeight > Level2)
-                        {
-                            OneStep(false);//Rotates down   
-                            currentHeight = GetDistance();
-                        
-                        }
-                        SG90ServoActivate(true);
-                    
-                    }
-                }
-
-                break;
-
-            case 3:
-
-                    if( currentHeight = Level3)
-                    {
-                        SG90ServoActivate(true);
                     }
                     else
                     {
-                        if (currentHeight < Level3 )
-                         {
-                            while (currentHeight < Level3)
-                            {
-                                OneStep(true);//Rotates up
-                                currentHeight = GetDistance();
-                            
-                            }
-                            SG90ServoActivate(true);
+                    Serial.print("Hay un error con el nivel 2");
+                    }
+                }
+            }
+        break;
 
-                        }
-                        else 
+        case 4: 
+            if (currentHeight == Level3)
+            {
+                
+            }
+            else{
+                if (currentHeight > Level3)
+                {
+                    while (currentHeight > Level3)
+                    {
+                        OneStep(true); //Go down
+                        currentHeight=GetDistance();
+                    }
+                }else
+                {
+                   if (currentHeight < Level3)
+                    {
+                        while (currentHeight < Level3)
                         {
-                            
-                            while (currentHeight > Level3)
-                            {
-                                OneStep(false);//Rotates down   
-                                currentHeight = GetDistance();
-                            }
-                            SG90ServoActivate(true);
-                            
+                            OneStep(false); //Go up
+                            currentHeight=GetDistance();
                         }
                     }
-
-                break;
-
-            case 4:
-
-                if( currentHeight = Level4)
-                {
-                    SG90ServoActivate(true);
+                    else
+                    {
+                    Serial.print("Hay un error con el nivel 3");
+                    }
                 }
-                else
+            }
+        break;
+
+        case 5:
+            if (currentHeight == Level4)
+            {
+                
+            }
+            else{
+                if (currentHeight < Level4)
                 {
                     while (currentHeight < Level4)
                     {
-                        OneStep(true);//Rotates up
-                        currentHeight = GetDistance();
-                        
+                        OneStep(false); //Go up
+                        currentHeight=GetDistance();
                     }
-                    SG90ServoActivate(true);
+                }else
+                {
+                    Serial.print("Hay un error con el nivel 4");
                 }
-
-                break;
-            
-            default:
-                Serial.print("There is an error with the button input");
-                break;
             }
-                
+        break;
+
+        default:
+        Serial.print("Hay un error general, este es el caso default");
+            break;
         }
         
         lastButton = pressedButton;
@@ -313,7 +294,7 @@ void loop()
 
     }
 
-    int GetDistance()
+    float GetDistance()
     {
         digitalWrite(trigPin,LOW);
         delayMicroseconds(2);
@@ -381,74 +362,6 @@ void loop()
         }
     }
 
-
-    #pragma endregion
-
-    #pragma region 5011AS-NumberDisplay Functions
-
-    void NumberDisplayCofig(uint8_t pins[],uint8_t mode)
-    {
-            for (int i = 0; i < sizeof(pins)/sizeof(pins[0]) ; i++)
-        {
-            pinMode(pins[i], mode);
-        }
-    }
-
-    void DisplayFloor(int floorNumber)
-    {
-
-        switch (floorNumber)
-        {
-        case 1:
-
-            digitalWrite(PIN0,LOW);
-            digitalWrite(PIN1,LOW);
-            digitalWrite(PIN2,LOW);
-            digitalWrite(PIN3,HIGH);
-            digitalWrite(PIN4,LOW);
-
-            break;
-        case 2:
-
-            digitalWrite(PIN0,HIGH);
-            digitalWrite(PIN1,HIGH);
-            digitalWrite(PIN2,HIGH);
-            digitalWrite(PIN3,LOW);
-            digitalWrite(PIN4,LOW);
-
-            break;
-        case 3:
-
-            digitalWrite(PIN0,HIGH);
-            digitalWrite(PIN1,HIGH);
-            digitalWrite(PIN2,LOW);
-            digitalWrite(PIN3,HIGH);
-            digitalWrite(PIN4,LOW);
-
-            break;
-
-        case 4:
-
-            digitalWrite(PIN0,LOW);
-            digitalWrite(PIN1,HIGH);
-            digitalWrite(PIN2,LOW);
-            digitalWrite(PIN3,HIGH);
-            digitalWrite(PIN4,HIGH);
-            
-            break;
-        
-        default:
-
-            digitalWrite(PIN0,LOW);
-            digitalWrite(PIN1,LOW);
-            digitalWrite(PIN2,LOW);
-            digitalWrite(PIN3,LOW);
-            digitalWrite(PIN4,LOW);
-
-            break;
-
-        }
-    }
 
     #pragma endregion
 

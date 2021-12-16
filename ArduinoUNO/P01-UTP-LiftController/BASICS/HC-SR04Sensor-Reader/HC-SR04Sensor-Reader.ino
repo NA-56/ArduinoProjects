@@ -1,5 +1,5 @@
-#define trigPin 9
-#define echoPin 10
+#define trigPin 12
+#define echoPin 13
 
 long duration;
 int distance; 
@@ -8,6 +8,7 @@ void setup()
 {
     pinMode(trigPin, OUTPUT);
     pinMode(echoPin, INPUT);
+    pinMode(2,INPUT);
 
     Serial.begin(9600);
     
@@ -25,7 +26,13 @@ void loop()
     duration = pulseIn(echoPin, HIGH);
     distance = duration*0.034/2;
 
-    Serial.print("\n Distance: ");
-    Serial.print(distance);
+    if (true)
+    {
+          Serial.print("\n Distance: ");
+        Serial.print(distance);
+    }
+    
+
+  
 
 }
