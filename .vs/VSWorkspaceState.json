@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\ArduinoUNO",
+    "\\ArduinoUNO\\P01-UTP-LiftController",
+    "\\ArduinoUNO\\P02-UTP-1AxisStabilizer"
   ],
-  "SelectedNode": "\\C:\\Users\\nicol\\OneDrive\\Escritorio\\ArduinoRepo",
+  "SelectedNode": "\\ArduinoUNO\\P02-UTP-1AxisStabilizer\\P02-UTP-1AxisStabilizer.ino",
   "PreviewInSolutionExplorer": false
 }
