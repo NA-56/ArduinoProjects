@@ -16,6 +16,9 @@ int ax, ay, az;
 #define STEPPER_PIN_2 9
 #define STEPPER_PIN_3 10
 #define STEPPER_PIN_4 11
+
+#define Potentiometer_PIN A0
+
 int step_number = 0;
 float ax_m_s2;
 float ay_m_s2;
@@ -25,6 +28,10 @@ float angleInPlaneXY;
 
 float loop_timer;
 int t, loop_counter, periodo;
+
+float potentiometer; 
+
+float reference;
 
 void setup() {
   Serial.begin(115200);    //Iniciando puerto serial
@@ -48,23 +55,31 @@ void loop() {
   while (micros() - loop_timer < 5000);  
   loop_timer = micros();
   
+  potentiometer = analogRead(Potentiometer_PIN);
+  
   // Leer las aceleraciones
   sensor.getAcceleration(&ax, &ay, &az);
   ax_m_s2 = ax * (9.807/16384.0);
   ay_m_s2 = ay * (9.807/16384.0);
   az_m_s2 = az * (9.807/16384.0);
   tanValue = (ay_m_s2)/(sqrt(pow(ax_m_s2,2)+ pow(az_m_s2,2)));
-  angleInPlaneXY = atan(tanValue);
   
+  angleInPlaneXY = (atan(tanValue));
+  
+  
+  reference = 1.50*(potentiometer/1022);
+
   Serial.print(angleInPlaneXY);
   Serial.print("\n");
+  Serial.print(reference);
+  Serial.print("\n");
 
-  if (angleInPlaneXY < -0.1)
+  if (angleInPlaneXY < (reference-0.1))
   {
       OneStep(true);
   }
   
-  if (angleInPlaneXY > 0.1)
+  if (angleInPlaneXY > (0.1 + reference))
   {
       OneStep(false);
   }
